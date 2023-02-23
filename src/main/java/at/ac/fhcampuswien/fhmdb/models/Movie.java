@@ -1,11 +1,14 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Comparable<Movie>{
     private String title;
     private String description;
+    private String resolution;
     // TODO add more properties here
 
     public Movie(String title, String description) {
@@ -23,8 +26,15 @@ public class Movie {
 
     public static List<Movie> initializeMovies(){
         List<Movie> movies = new ArrayList<>();
-        // TODO add some dummy data here
+        movies.add(new Movie("Avatar", "A story in 3D"));
+        movies.add(new Movie("Equilibrium", "A dark story"));
+        movies.add(new Movie("Crown", "More a series than a movie"));
 
         return movies;
+    }
+
+    @Override
+    public int compareTo(Movie o) {
+        return this.title.compareTo(o.title);
     }
 }
