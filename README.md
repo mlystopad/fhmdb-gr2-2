@@ -1,7 +1,7 @@
 ## PRG2 - Exercise 1 
 Teammembers:
-Maksym Lystopad
-Clemens Hörhan
+Maksym Lystopad,
+Clemens Hörhan,
 Klea Kupi-Herbst
 
 ### Start the application
