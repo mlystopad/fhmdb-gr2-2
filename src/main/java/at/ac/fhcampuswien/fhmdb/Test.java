@@ -10,9 +10,9 @@ public class Test {
      */
     public static void main(String[] args) {
         ArrayList<Movie> movies = new ArrayList<>();
-        movies.add(new Movie("Avatar", "A story in 3D"));
-        movies.add(new Movie("Equilibrium", "A dark story"));
-        movies.add(new Movie("Crown", "More a series than a movie"));
+        movies.add(new Movie("Avatar", "A story in 3D", ""));
+        movies.add(new Movie("Equilibrium", "A dark story", ""));
+        movies.add(new Movie("Crown", "More a series than a movie", ""));
 
         System.out.println(movies.toString());
     }
