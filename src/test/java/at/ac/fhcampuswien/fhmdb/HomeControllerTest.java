@@ -3,6 +3,7 @@ package at.ac.fhcampuswien.fhmdb;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import org.junit.jupiter.api.Test;
 
+import java.rmi.MarshalledObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -64,5 +65,12 @@ class HomeControllerTest {
         String expected = temp.toString();
         assertArrayEquals(expected.toCharArray(), actual.toCharArray());
     }
-  
+    @Test
+    void searchField_listens() {
+        HomeController hm = new HomeController();
+        hm.searchField.textProperty().set("ava");
+        Movie expected = hm.observableMovies.get(0);
+
+        assertEquals(expected, hm.allMovies.get(0));
+    }
 }
