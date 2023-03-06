@@ -1,5 +1,7 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import at.ac.fhcampuswien.fhmdb.FhmdbApplication;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

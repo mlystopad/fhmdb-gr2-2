@@ -63,6 +63,17 @@ public class HomeController implements Initializable {
             }
         });
 
+        searchField.textProperty().addListener((observable, oldField, newField) -> {
+            observableMovies.clear();
 
+            System.out.println(newField);
+            for(Movie movie : allMovies){
+                if(movie.getTitle().toLowerCase(Locale.ROOT).contains(newField.toLowerCase(Locale.ROOT)) ||
+                        movie.getDescription().toLowerCase(Locale.ROOT).contains(newField.toLowerCase(Locale.ROOT))){
+                    observableMovies.add(movie);
+                }
+
+            }
+        });
     }
 }
