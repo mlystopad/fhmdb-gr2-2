@@ -82,6 +82,27 @@ public class Movie implements Comparable<Movie>{
         return movies;
     }
 
+    public static void filterMoviesByGenre(List<Movie> toFilter, String genre){
+        Iterator<Movie> iterator = toFilter.iterator();
+        while (iterator.hasNext()){
+            if(!iterator.next().getGenre().contains(genre)){
+                iterator.remove();
+            }
+        }
+    }
+    public static void filterMoviesBySearchString(List<Movie> toFilter, String toSearch){
+        Iterator<Movie> iterator = toFilter.iterator();
+        while (iterator.hasNext()){
+            Movie next = iterator.next();
+            if(!next.getTitle().toLowerCase().contains(toSearch.toLowerCase()) &&
+                    !next.getDescription().toLowerCase().contains(toSearch.toLowerCase())){
+                iterator.remove();
+            }
+        }
+
+    }
+
+
     @Override
     public int compareTo(Movie o) {
         return this.title.compareTo(o.title);

@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
     @FXML
@@ -46,6 +47,7 @@ public class HomeController implements Initializable {
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().add("Filter by Genre");
         genreComboBox.getItems().addAll(Genre.getGenresAsList());
+        genreComboBox.getSelectionModel().select(0);
 
         // TODO add event handlers to buttons and call the regarding methods
         // either set event handlers in the fxml file (onAction) or add them here
@@ -64,13 +66,14 @@ public class HomeController implements Initializable {
 
         searchField.textProperty().addListener((observable, oldField, newField) -> {
             observableMovies.clear();
-            System.out.println(observableMovies.isEmpty());
+            String selectedGenre = (String) genreComboBox.getSelectionModel().getSelectedItem();
 
-            System.out.println(newField);
             for(Movie movie : allMovies){
                 if(movie.getTitle().toLowerCase(Locale.ROOT).contains(newField.toLowerCase(Locale.ROOT)) ||
                         movie.getDescription().toLowerCase(Locale.ROOT).contains(newField.toLowerCase(Locale.ROOT))){
-                    observableMovies.add(movie);
+                    if(movie.getGenre().contains(selectedGenre) || selectedGenre.equals("Filter by Genre")){
+                        observableMovies.add(movie);
+                    }
                 }
             }
         });
@@ -78,7 +81,8 @@ public class HomeController implements Initializable {
 
         searchBtn.setOnAction(actionEvent -> {
             String selectedGenre = (String) genreComboBox.getSelectionModel().getSelectedItem();
-            if (selectedGenre != null) {
+
+            /*if (selectedGenre != null) {
                 observableMovies.clear();
                 for (Movie movie : allMovies) {
                     if (movie.getGenre().contains(selectedGenre)) {
@@ -89,8 +93,22 @@ public class HomeController implements Initializable {
                 }
             } else {
                 observableMovies.setAll(allMovies);
+            }*/
+            /*if(selectedGenre.equals("Filter by Genre")){
+                observableMovies.clear();
+                observableMovies.addAll(allMovies);
+                Movie.filterMoviesByGenre(observableMovies, selectedGenre);
+                return;
+            }*/
+            observableMovies.clear();
+            observableMovies.addAll(allMovies);
+            if(!selectedGenre.equals("Filter by Genre")) {
+                Movie.filterMoviesByGenre(observableMovies, selectedGenre);
             }
-            System.out.println(observableMovies);
+
+            if(!searchField.getText().equals("")) {
+                Movie.filterMoviesBySearchString(observableMovies, searchField.getText());
+            }
         });
 
     }
