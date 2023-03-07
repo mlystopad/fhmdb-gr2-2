@@ -11,6 +11,10 @@
     -fx-background-color: #454545;
 }
 
+.text-albaniancolor {
+    -fx-text-fill: #fcf4a0;
+}
+
 .text-yellow {
     -fx-text-fill: #f5c518;
 }
