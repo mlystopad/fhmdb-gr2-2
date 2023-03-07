@@ -43,9 +43,9 @@ public class HomeController implements Initializable {
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
         genreComboBox.setPromptText("Filter by Genre");
-        genreComboBox.getItems().addAll("ACTION", "ADVENTURE", "ANIMATION", "BIOGRAPHY", "COMEDY",
+        genreComboBox.getItems().addAll("Filter by Genre", "ACTION", "ADVENTURE", "ANIMATION", "BIOGRAPHY", "COMEDY",
                 "CRIME", "DRAMA", "DOCUMENTARY", "FAMILY", "FANTASY", "HISTORY", "HORROR",
-                "MUSICAL", "MYSTERY", "ROMANCE", "SCIENCE_FICTION", "SPORT", "THRILLER", "WAR",
+                "MUSICAL", "MYSTERY", "ROMANCE", "SCIENCE FICTION", "SPORT", "THRILLER", "WAR",
                 "WESTERN");
 
         // TODO add event handlers to buttons and call the regarding methods
@@ -72,7 +72,23 @@ public class HomeController implements Initializable {
                         movie.getDescription().toLowerCase(Locale.ROOT).contains(newField.toLowerCase(Locale.ROOT))){
                     observableMovies.add(movie);
                 }
+            }
+        });
 
+
+        searchBtn.setOnAction(actionEvent -> {
+            String selectedGenre = (String) genreComboBox.getSelectionModel().getSelectedItem();
+            if (selectedGenre != null) {
+                observableMovies.clear();
+                for (Movie movie : allMovies) {
+                    if (movie.getGenre().contains(selectedGenre)) {
+                        observableMovies.add(movie);
+                    } if(selectedGenre.equals("Filter by Genre")){
+                        observableMovies.setAll(allMovies);
+                    }
+                }
+            } else {
+                observableMovies.setAll(allMovies);
             }
         });
     }
