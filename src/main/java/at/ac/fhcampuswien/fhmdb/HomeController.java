@@ -65,7 +65,6 @@ public class HomeController implements Initializable {
 
         searchField.textProperty().addListener((observable, oldField, newField) -> {
             observableMovies.clear();
-            System.out.println(observableMovies.isEmpty());
 
             System.out.println(newField);
             for(Movie movie : allMovies){
@@ -91,8 +90,6 @@ public class HomeController implements Initializable {
             } else {
                 observableMovies.setAll(allMovies);
             }
-            System.out.println(observableMovies);
         });
-
     }
 }
