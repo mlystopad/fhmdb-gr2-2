@@ -20,7 +20,7 @@ public class Genre{
     public static final String MUSICAL = "MUSICAL";
     public static final String MYSTERY = "MYSTERY";
     public static final String ROMANCE = "ROMANCE";
-    public static final String SCIENCEFICTION = "SCIENCEFICTION";
+    public static final String SCIENCEFICTION = "SCIENCE FICTION";
     public static final String SPORT = "SPORT";
     public static final String THRILLER = "THRILLER";
     public static final String WAR = "WAR";
