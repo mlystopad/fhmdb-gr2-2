@@ -137,7 +137,7 @@ class HomeControllerTest {
                     if (movie.getGenre().contains(selectedGenre)) {
                         observableMovies.add(movie);
                     }
-                    if(selectedGenre.equals(" ")){
+                    if(selectedGenre.equals("Filter by Genre")){
                         observableMovies.setAll(allMovies);
                     }
                 }
@@ -160,7 +160,7 @@ class HomeControllerTest {
         assertEquals("Title 3", observableMovies.get(0).getTitle());
 
         // Test empty search field
-        searchField.set(" ");
+        searchField.set("Filter by Genre");
         assertEquals(3, observableMovies.size());
 
         // Test non-matching search
