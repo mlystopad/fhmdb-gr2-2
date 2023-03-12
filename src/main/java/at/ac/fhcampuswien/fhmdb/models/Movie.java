@@ -83,6 +83,13 @@ public class Movie implements Comparable<Movie>{
     }
 
     public static void filterMoviesByGenre(List<Movie> toFilter, String genre){
+        if(genre == null){
+            throw new NullPointerException("Requesting Genre must not be null!");
+        }
+
+        if(!Genre.getGenresAsList().contains(genre)){
+            return;
+        }
         Iterator<Movie> iterator = toFilter.iterator();
         while (iterator.hasNext()){
             if(!iterator.next().getGenre().contains(genre)){
@@ -91,6 +98,10 @@ public class Movie implements Comparable<Movie>{
         }
     }
     public static void filterMoviesBySearchString(List<Movie> toFilter, String toSearch){
+        if(toSearch == null){
+            throw new NullPointerException("Searchstring must not be null!");
+        }
+
         Iterator<Movie> iterator = toFilter.iterator();
         while (iterator.hasNext()){
             Movie next = iterator.next();

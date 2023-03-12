@@ -1,16 +1,14 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 class HomeControllerTest {
@@ -75,96 +73,95 @@ class HomeControllerTest {
         assertArrayEquals(expected.toCharArray(), actual.toCharArray());
     }
 
-
     @Test
-    void testSearchField() {
-        StringProperty searchField = new SimpleStringProperty();
+    void filter_by_genre_null_throws_NullPointerException() {
+        // given
+        List<Movie> movies = Movie.initializeMovies();
+        ArrayList<Movie> expected = new ArrayList<>(movies);
 
-        ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
+        //when
+        //then
+        assertThrows(NullPointerException.class,
+                () -> Movie.filterMoviesByGenre(movies, null));
 
-        List<Movie> allMovies = new ArrayList<>();
-        allMovies.add(new Movie("Title 1", "Description 1", Collections.singletonList("GENRE")));
-        allMovies.add(new Movie("Title 2", "Description 2", Collections.singletonList("GENRE")));
-        allMovies.add(new Movie("Title 3", "Description 3", Collections.singletonList("GENRE")));
-
-        // Add a listener to the search field
-        searchField.addListener((observable, oldField, newField) -> {
-            observableMovies.clear();
-            for (Movie movie : allMovies) {
-                if (movie.getTitle().toLowerCase(Locale.ROOT).contains(newField.toLowerCase(Locale.ROOT)) ||
-                        movie.getDescription().toLowerCase(Locale.ROOT).contains(newField.toLowerCase(Locale.ROOT))) {
-                    observableMovies.add(movie);
-                }
-            }
-        });
-
-        // Test searching for a term that matches one movie
-        searchField.set("Title 1");
-        assertEquals(1, observableMovies.size());
-        assertEquals(allMovies.get(0), observableMovies.get(0));
-
-        // Test searching for a term that matches multiple movies
-        searchField.set("Description");
-        assertEquals(3, observableMovies.size());
-        assertEquals(allMovies.get(0), observableMovies.get(0));
-        assertEquals(allMovies.get(1), observableMovies.get(1));
-        assertEquals(allMovies.get(2), observableMovies.get(2));
-
-        // Test searching for a term that doesn't match any movies
-        searchField.set("KillMePls");
-        assertEquals(0, observableMovies.size());
     }
 
     @Test
-    public void testSearchByGenre() {
-        searchField = new SimpleStringProperty();
-        observableMovies = FXCollections.observableArrayList();
-        allMovies = new ArrayList<>();
-        allMovies.add(new Movie("Title 1", "Description 1", Collections.singletonList("DRAMA")));
-        allMovies.add(new Movie("Title 2", "Description 2", Collections.singletonList("COMEDY")));
-        allMovies.add(new Movie("Title 3", "Description 3", Collections.singletonList("WAR")));
+    void filter_by_nonexistent_genre() {
+        // given
+        List<Movie> movies = Movie.initializeMovies();
+        ArrayList<Movie> expected = new ArrayList<>(movies);
 
-        // Set up test data
-        observableMovies.addAll(allMovies);
+        //when
+        Movie.filterMoviesByGenre(movies, "Puppenspielfilm");
 
-        // Set up event handler
-        searchField.addListener((observable, oldField, newField) -> {
-            observableMovies.clear();
+        //then
+        assertArrayEquals(expected.toArray(), movies.toArray());
 
-            String selectedGenre = newField;
-            if (!selectedGenre.isEmpty()) {
-                for (Movie movie : allMovies) {
-                    if (movie.getGenre().contains(selectedGenre)) {
-                        observableMovies.add(movie);
-                    }
-                    if(selectedGenre.equals("Filter by Genre")){
-                        observableMovies.setAll(allMovies);
-                    }
-                }
-            } else {
-                observableMovies.setAll(allMovies);
-            }
-        });
-
-        // Test search by genre
-        searchField.set("DRAMA");
-        assertEquals(1, observableMovies.size());
-        assertEquals("Title 1", observableMovies.get(0).getTitle());
-
-        searchField.set("COMEDY");
-        assertEquals(1, observableMovies.size());
-        assertEquals("Title 2", observableMovies.get(0).getTitle());
-
-        searchField.set("WAR");
-        assertEquals(1, observableMovies.size());
-        assertEquals("Title 3", observableMovies.get(0).getTitle());
-
-        // Test empty search field
-        searchField.set("Filter by Genre");
-        assertEquals(3, observableMovies.size());
-
-        // Test non-matching search
-        searchField.set("MYSTERY");
-        assertEquals(0, observableMovies.size());
     }
+
+
+
+    @Test
+    void filter_by_search_string_null_throws_NullPointerException() {
+        // given
+        List<Movie> movies = Movie.initializeMovies();
+        ArrayList<Movie> expected = new ArrayList<>(movies);
+
+        //when
+        //then
+        assertThrows(NullPointerException.class,
+                () -> Movie.filterMoviesBySearchString(movies, null));
+
+    }
+
+    @Test
+    void filter_by_genre_drama() {
+        // given
+        List<Movie> movies = Movie.initializeMovies();
+        ArrayList<Movie> expected = new ArrayList<>();
+        expected.add(movies.get(0));
+        expected.add(movies.get(3));
+        expected.add(movies.get(5));
+        expected.add(movies.get(6));
+        expected.add(movies.get(14));
+
+        //when
+        Movie.filterMoviesByGenre(movies, Genre.ADVENTURE);
+
+        //then
+        assertArrayEquals(expected.toArray(), movies.toArray());
+
+    }
+
+    @Test
+    public void filter_by_search_string_working() {
+        // given
+        List<Movie> movies = Movie.initializeMovies();
+        ArrayList<Movie> expected = new ArrayList<>();
+        expected.add(movies.get(12));
+        expected.add(movies.get(14));
+
+        //when
+        Movie.filterMoviesBySearchString(movies, "WORKING");
+
+        //then
+        assertArrayEquals(expected.toArray(), movies.toArray());
+    }
+
+    @Test
+    public void filter_by_genre_drama_and_search_string_working() {
+        // given
+        List<Movie> movies = Movie.initializeMovies();
+        ArrayList<Movie> expected = new ArrayList<>();
+        expected.add(movies.get(14));
+
+        //when
+        Movie.filterMoviesBySearchString(movies, "WORKING");
+        Movie.filterMoviesByGenre(movies, Genre.WESTERN);
+
+        //then
+        assertArrayEquals(expected.toArray(), movies.toArray());
+    }
+
 }

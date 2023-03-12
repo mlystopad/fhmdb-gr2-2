@@ -69,8 +69,10 @@ public class HomeController implements Initializable {
             String selectedGenre = (String) genreComboBox.getSelectionModel().getSelectedItem();
 
             for(Movie movie : allMovies){
+                // check if string is contained in title or description
                 if(movie.getTitle().toLowerCase(Locale.ROOT).contains(newField.toLowerCase(Locale.ROOT)) ||
                         movie.getDescription().toLowerCase(Locale.ROOT).contains(newField.toLowerCase(Locale.ROOT))){
+                    // now check for the genre if one is selected
                     if(movie.getGenre().contains(selectedGenre) || selectedGenre.equals("Filter by Genre")){
                         observableMovies.add(movie);
                     }
@@ -80,32 +82,15 @@ public class HomeController implements Initializable {
 
 
         searchBtn.setOnAction(actionEvent -> {
+            observableMovies.clear();
             String selectedGenre = (String) genreComboBox.getSelectionModel().getSelectedItem();
 
-            /*if (selectedGenre != null) {
-                observableMovies.clear();
-                for (Movie movie : allMovies) {
-                    if (movie.getGenre().contains(selectedGenre)) {
-                        observableMovies.add(movie);
-                    } if(selectedGenre.equals("Filter by Genre")){
-                        observableMovies.setAll(allMovies);
-                    }
-                }
-            } else {
-                observableMovies.setAll(allMovies);
-            }*/
-            /*if(selectedGenre.equals("Filter by Genre")){
-                observableMovies.clear();
-                observableMovies.addAll(allMovies);
-                Movie.filterMoviesByGenre(observableMovies, selectedGenre);
-                return;
-            }*/
-            observableMovies.clear();
             observableMovies.addAll(allMovies);
+            // remove all movies that don´t fit the genre
             if(!selectedGenre.equals("Filter by Genre")) {
                 Movie.filterMoviesByGenre(observableMovies, selectedGenre);
             }
-
+            // remove all movies that don´t contain the searchstring
             if(!searchField.getText().equals("")) {
                 Movie.filterMoviesBySearchString(observableMovies, searchField.getText());
             }

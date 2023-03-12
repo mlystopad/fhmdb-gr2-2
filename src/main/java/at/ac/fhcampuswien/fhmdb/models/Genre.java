@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Class for providing all the valid genres
+ */
 public class Genre{
     public static final String ACTION = "ACTION";
     public static final String ADVENTURE = "ADVENTURE";
