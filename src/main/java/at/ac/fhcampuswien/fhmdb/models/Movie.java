@@ -82,41 +82,17 @@ public class Movie implements Comparable<Movie>{
         return movies;
     }
 
-    public static void filterMoviesByGenre(List<Movie> toFilter, String genre){
-        if(genre == null){
-            throw new NullPointerException("Requesting Genre must not be null!");
-        }
-
-        if(!Genre.getGenresAsList().contains(genre)){
-            return;
-        }
-        Iterator<Movie> iterator = toFilter.iterator();
-        while (iterator.hasNext()){
-            if(!iterator.next().getGenre().contains(genre)){
-                iterator.remove();
-            }
-        }
-    }
-    public static void filterMoviesBySearchString(List<Movie> toFilter, String toSearch){
-        if(toSearch == null){
-            throw new NullPointerException("Searchstring must not be null!");
-        }
-
-        Iterator<Movie> iterator = toFilter.iterator();
-        while (iterator.hasNext()){
-            Movie next = iterator.next();
-            if(!next.getTitle().toLowerCase().contains(toSearch.toLowerCase()) &&
-                    !next.getDescription().toLowerCase().contains(toSearch.toLowerCase())){
-                iterator.remove();
-            }
-        }
-
-    }
-
-
     @Override
     public int compareTo(Movie o) {
         return this.title.compareTo(o.title);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return Objects.equals(title, movie.title) && Objects.equals(description, movie.description) && Objects.equals(genre, movie.genre);
     }
 
     @Override

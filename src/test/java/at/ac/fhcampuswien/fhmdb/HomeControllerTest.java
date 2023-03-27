@@ -12,9 +12,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 class HomeControllerTest {
-    private StringProperty searchField;
-    private ObservableList<Movie> observableMovies;
-    private List<Movie> allMovies;
 
     @Test
     void ascending_sorting() {
@@ -74,51 +71,64 @@ class HomeControllerTest {
     }
 
     @Test
-    void filter_by_genre_null_throws_NullPointerException() {
+    void filter_by_genre_null_leaves_movies_unchanged() {
         // given
-        List<Movie> movies = Movie.initializeMovies();
-        ArrayList<Movie> expected = new ArrayList<>(movies);
+        List<Movie> expected = Movie.initializeMovies();
+        HomeController hc = new HomeController();
 
         //when
+        hc.filterMoviesByGenre(null);
         //then
-        assertThrows(NullPointerException.class,
-                () -> Movie.filterMoviesByGenre(movies, null));
-
+        assertArrayEquals(expected.toArray(), hc.getObservableMovies().toArray());
     }
 
     @Test
-    void filter_by_nonexistent_genre() {
+    void filter_by_nonexistent_genre_leaves_movies_unchanged() {
         // given
-        List<Movie> movies = Movie.initializeMovies();
-        ArrayList<Movie> expected = new ArrayList<>(movies);
+        List<Movie> expected = Movie.initializeMovies();
+        HomeController hc = new HomeController();
 
         //when
-        Movie.filterMoviesByGenre(movies, "Puppenspielfilm");
+        hc.filterMoviesByGenre("Puppenspielfilm");
 
         //then
-        assertArrayEquals(expected.toArray(), movies.toArray());
+        assertArrayEquals(expected.toArray(), hc.getObservableMovies().toArray());
 
     }
 
 
 
     @Test
-    void filter_by_search_string_null_throws_NullPointerException() {
+    void filter_by_search_string_null_leaves_movies_unchanged() {
         // given
-        List<Movie> movies = Movie.initializeMovies();
-        ArrayList<Movie> expected = new ArrayList<>(movies);
+        List<Movie> expected = Movie.initializeMovies();
+        HomeController hc = new HomeController();
 
         //when
-        //then
-        assertThrows(NullPointerException.class,
-                () -> Movie.filterMoviesBySearchString(movies, null));
+        hc.filterMoviesBySearchString(null);
 
+        //then
+        assertArrayEquals(expected.toArray(), hc.getObservableMovies().toArray());
     }
 
     @Test
-    void filter_by_genre_drama() {
+    void filter_by_search_string_empty_string_leaves_movies_unchanged(){
+        // given
+        List<Movie> expected = Movie.initializeMovies();
+        HomeController hc = new HomeController();
+
+        //when
+        hc.filterMoviesBySearchString("");
+
+        //then
+        assertArrayEquals(expected.toArray(), hc.getObservableMovies().toArray());
+    }
+
+    @Test
+    void filter_by_genre_adventure() {
         // given
         List<Movie> movies = Movie.initializeMovies();
+        HomeController hc = new HomeController();
         ArrayList<Movie> expected = new ArrayList<>();
         expected.add(movies.get(0));
         expected.add(movies.get(3));
@@ -127,10 +137,10 @@ class HomeControllerTest {
         expected.add(movies.get(14));
 
         //when
-        Movie.filterMoviesByGenre(movies, Genre.ADVENTURE);
+        hc.filterMoviesByGenre(Genre.ADVENTURE);
 
         //then
-        assertArrayEquals(expected.toArray(), movies.toArray());
+        assertArrayEquals(expected.toArray(), hc.getObservableMovies().toArray());
 
     }
 
@@ -139,14 +149,15 @@ class HomeControllerTest {
         // given
         List<Movie> movies = Movie.initializeMovies();
         ArrayList<Movie> expected = new ArrayList<>();
+        HomeController hc = new HomeController();
         expected.add(movies.get(12));
         expected.add(movies.get(14));
 
         //when
-        Movie.filterMoviesBySearchString(movies, "WORKING");
+        hc.filterMoviesBySearchString("WORKING");
 
         //then
-        assertArrayEquals(expected.toArray(), movies.toArray());
+        assertArrayEquals(expected.toArray(), hc.getObservableMovies().toArray());
     }
 
     @Test
@@ -154,14 +165,15 @@ class HomeControllerTest {
         // given
         List<Movie> movies = Movie.initializeMovies();
         ArrayList<Movie> expected = new ArrayList<>();
+        HomeController hc = new HomeController();
         expected.add(movies.get(14));
 
         //when
-        Movie.filterMoviesBySearchString(movies, "WORKING");
-        Movie.filterMoviesByGenre(movies, Genre.WESTERN);
+        hc.filterMoviesBySearchString("WORKING");
+        hc.filterMoviesByGenre(Genre.WESTERN);
 
         //then
-        assertArrayEquals(expected.toArray(), movies.toArray());
+        assertArrayEquals(expected.toArray(), hc.getObservableMovies().toArray());
     }
 
 }

@@ -6,6 +6,8 @@ import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -36,6 +38,19 @@ public class HomeController implements Initializable {
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
+    public ObservableList<Movie> getObservableMovies() {
+        return observableMovies;
+    }
+
+    public void fillMovies(){
+        observableMovies.clear();
+        observableMovies.addAll(allMovies);
+    }
+
+    public HomeController() {
+        this.fillMovies();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         observableMovies.addAll(allMovies);         // add dummy data to observable list
@@ -44,7 +59,6 @@ public class HomeController implements Initializable {
         movieListView.setItems(observableMovies);   // set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
-        genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().add("Filter by Genre");
         genreComboBox.getItems().addAll(Genre.getGenresAsList());
         genreComboBox.getSelectionModel().select(0);
@@ -65,36 +79,57 @@ public class HomeController implements Initializable {
         });
 
         searchField.textProperty().addListener((observable, oldField, newField) -> {
-            observableMovies.clear();
+            fillMovies();
             String selectedGenre = (String) genreComboBox.getSelectionModel().getSelectedItem();
 
-            for(Movie movie : allMovies){
-                // check if string is contained in title or description
-                if(movie.getTitle().toLowerCase(Locale.ROOT).contains(newField.toLowerCase(Locale.ROOT)) ||
-                        movie.getDescription().toLowerCase(Locale.ROOT).contains(newField.toLowerCase(Locale.ROOT))){
-                    // now check for the genre if one is selected
-                    if(movie.getGenre().contains(selectedGenre) || selectedGenre.equals("Filter by Genre")){
-                        observableMovies.add(movie);
-                    }
-                }
-            }
+            filterMoviesByGenre(selectedGenre);
+            filterMoviesBySearchString(newField);
         });
 
+        genreComboBox.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                fillMovies();
 
-        searchBtn.setOnAction(actionEvent -> {
-            observableMovies.clear();
-            String selectedGenre = (String) genreComboBox.getSelectionModel().getSelectedItem();
-
-            observableMovies.addAll(allMovies);
-            // remove all movies that don´t fit the genre
-            if(!selectedGenre.equals("Filter by Genre")) {
-                Movie.filterMoviesByGenre(observableMovies, selectedGenre);
-            }
-            // remove all movies that don´t contain the searchstring
-            if(!searchField.getText().equals("")) {
-                Movie.filterMoviesBySearchString(observableMovies, searchField.getText());
+                filterMoviesByGenre(newValue);
+                filterMoviesBySearchString(searchField.getText());
             }
         });
+    }
 
+    public void filterMoviesByGenre(String genre){
+        if(genre == null){
+            System.err.println("Genre must not be null!");
+            return;
+        }
+
+        if(!Genre.getGenresAsList().contains(genre)){
+            return;
+        }
+
+        Iterator<Movie> iterator = observableMovies.iterator();
+        while (iterator.hasNext()){
+            if(!iterator.next().getGenre().contains(genre)){
+                iterator.remove();
+            }
+        }
+    }
+
+    public void filterMoviesBySearchString(String toSearch){
+        if(toSearch == null){
+            System.err.println("Searchstring must not be null!");
+            return;
+        }else if(toSearch.equals("")){
+            return;
+        }
+
+        Iterator<Movie> iterator = observableMovies.iterator();
+        while (iterator.hasNext()){
+            Movie next = iterator.next();
+            if(!next.getTitle().toLowerCase().contains(toSearch.toLowerCase()) &&
+                    !next.getDescription().toLowerCase().contains(toSearch.toLowerCase())){
+                iterator.remove();
+            }
+        }
     }
 }
