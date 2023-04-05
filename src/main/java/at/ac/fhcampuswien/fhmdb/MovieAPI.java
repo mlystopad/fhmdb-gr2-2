@@ -9,7 +9,11 @@ import okhttp3.ResponseBody;
 import java.io.IOException;
 
 public class MovieAPI {
-
+    /**
+     * A method that downloads a list of Movies as JSON and converts it to an array of Movies
+     * @param url a URL for a webpage with movies in corresponding format
+     * @return Movie[] - an array of Movies parsed from JSON
+     */
     public Movie[] getApiMovies(String url) {;
         Movie[] movies;
         try {
@@ -23,9 +27,10 @@ public class MovieAPI {
 
 
     /**
-     * Implementation of GET method that eats a URL to return a body of Response.
+     * Implementation of GET method that eats a URL to return a ResponseBody.
      * @param url a URL for a webpage
      * @throws IOException
+     * @return ResponseBody from the webpage
      */
     ResponseBody getRequest(String url) throws IOException {
         OkHttpClient client = new OkHttpClient();
