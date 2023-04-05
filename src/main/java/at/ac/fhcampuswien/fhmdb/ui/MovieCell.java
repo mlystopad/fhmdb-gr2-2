@@ -31,7 +31,7 @@ public class MovieCell extends ListCell<Movie> {
                             : "No description available"
             );
             StringBuilder builder = new StringBuilder();
-            for (String str:movie.getGenre())
+            for (String str:movie.getGenres())
             {
                 builder.append(str + ", ");
             }

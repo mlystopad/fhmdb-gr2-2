@@ -1,33 +1,33 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
 import at.ac.fhcampuswien.fhmdb.MovieAPI;
-import com.google.gson.Gson;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Movie implements Comparable<Movie>{
-    private final String iD;
-    private final String title;
-    private final String description;
-    private final List<String> genre;
-    private final int releaseYear;
-    private final String imgURL;
-    private final int lengthInMin;
-    private final ArrayList<String> directors;
-    private final ArrayList<String> writers;
-    private final ArrayList<String> mainCast;
-    private final double rating;
+    protected final String id;
+    protected final String title;
+    protected final String description;
+    protected final List<String> genres;
+    protected final int releaseYear;
+    protected final String imgUrl;
+    protected final int lengthInMinutes;
+    protected final List<String> directors;
+    protected final List<String> writers;
+    protected final List<String> mainCast;
+    protected final double rating;
     // TODO add more properties here
 
-    public Movie(String iD,String title, String description, List<String> genre, int releaseYear, String imgURL, int lengthInMin, ArrayList<String> directors, ArrayList<String> writers, ArrayList<String> mainCast, double rating) {
-        this.iD = iD;
+    public Movie(String id, String title, String description, List<String> genres, int releaseYear, String imgUrl, int lengthInMinutes, ArrayList<String> directors, ArrayList<String> writers, ArrayList<String> mainCast, double rating) {
+        this.id = id;
         this.title = title;
         this.description = description;
-        this.genre = genre;
+        this.genres = genres;
         this.releaseYear = releaseYear;
-        this.imgURL = imgURL;
-        this.lengthInMin = lengthInMin;
+        this.imgUrl = imgUrl;
+        this.lengthInMinutes = lengthInMinutes;
         this.directors = directors;
         this.writers = writers;
         this.mainCast = mainCast;
@@ -35,13 +35,13 @@ public class Movie implements Comparable<Movie>{
     }
 
     public Movie() {
-        this.iD = null;
+        this.id = null;
         this.title = null;
         this.description = null;
-        this.genre = null;
+        this.genres = null;
         this.releaseYear = 0;
-        this.imgURL = null;
-        this.lengthInMin = 0;
+        this.imgUrl = null;
+        this.lengthInMinutes = 0;
         this.directors = null;
         this.writers = null;
         this.mainCast = null;
@@ -56,19 +56,17 @@ public class Movie implements Comparable<Movie>{
         return description;
     }
 
-    public List<String> getGenre() {
-        return genre;
+    public List<String> getGenres() {
+        return genres;
     }
 
 
 
     public static List<Movie> initializeMovies(){
-        List<Movie> movies = new ArrayList<>();
+        String url = "https://prog2.fh-campuswien.ac.at/movies";
         MovieAPI movieAPI = new MovieAPI();
-
-
-
-
+        List<Movie> movies = Stream.of(movieAPI.getApiMovies(url))
+                .collect(Collectors.toList());
         return movies;
     }
 
@@ -82,7 +80,7 @@ public class Movie implements Comparable<Movie>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return Objects.equals(title, movie.title) && Objects.equals(description, movie.description) && Objects.equals(genre, movie.genre);
+        return Objects.equals(title, movie.title) && Objects.equals(description, movie.description) && Objects.equals(genres, movie.genres);
     }
 
     @Override

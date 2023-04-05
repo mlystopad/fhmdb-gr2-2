@@ -16,7 +16,6 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
     @FXML
@@ -53,7 +52,7 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        observableMovies.addAll(allMovies);         // add dummy data to observable list
+        observableMovies.addAll(allMovies);         // add movies to observable list
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
@@ -109,7 +108,7 @@ public class HomeController implements Initializable {
 
         Iterator<Movie> iterator = observableMovies.iterator();
         while (iterator.hasNext()){
-            if(!iterator.next().getGenre().contains(genre)){
+            if(!iterator.next().getGenres().contains(genre)){
                 iterator.remove();
             }
         }
