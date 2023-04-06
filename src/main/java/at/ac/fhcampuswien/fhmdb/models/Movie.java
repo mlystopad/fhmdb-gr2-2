@@ -14,13 +14,15 @@ public class Movie implements Comparable<Movie>{
     protected final int releaseYear;
     protected final String imgUrl;
     protected final int lengthInMinutes;
-    protected final List<String> directors;
     protected final List<String> writers;
     protected final List<String> mainCast;
     protected final double rating;
+    private int year;
+    private String director;
+
     // TODO add more properties here
 
-    public Movie(String id, String title, String description, List<String> genres, int releaseYear, String imgUrl, int lengthInMinutes, ArrayList<String> directors, ArrayList<String> writers, ArrayList<String> mainCast, double rating) {
+    public Movie(String id, String title, String description, List<String> genres, int releaseYear, String imgUrl, int year, int lengthInMinutes, String director, ArrayList<String> writers, ArrayList<String> mainCast, double rating) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -28,10 +30,11 @@ public class Movie implements Comparable<Movie>{
         this.releaseYear = releaseYear;
         this.imgUrl = imgUrl;
         this.lengthInMinutes = lengthInMinutes;
-        this.directors = directors;
         this.writers = writers;
         this.mainCast = mainCast;
         this.rating = rating;
+        this.director = director;
+        this.year = year;
     }
 
     public Movie() {
@@ -42,7 +45,6 @@ public class Movie implements Comparable<Movie>{
         this.releaseYear = 0;
         this.imgUrl = null;
         this.lengthInMinutes = 0;
-        this.directors = null;
         this.writers = null;
         this.mainCast = null;
         this.rating = 0;
@@ -59,6 +61,15 @@ public class Movie implements Comparable<Movie>{
     public List<String> getGenres() {
         return genres;
     }
+
+    public int getReleaseYear() { return releaseYear; }
+
+    public int getYear() {return year;}
+
+    public List<String> getMainCast() { return mainCast; }
+
+    public String getDirector() { return director; }
+
 
 
 
@@ -80,7 +91,7 @@ public class Movie implements Comparable<Movie>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return Objects.equals(title, movie.title) && Objects.equals(description, movie.description) && Objects.equals(genres, movie.genres);
+        return Objects.equals(title, movie.title) && Objects.equals(description, movie.description) && Objects.equals(genres, movie.genres) && Objects.equals(releaseYear, movie.releaseYear);
     }
 
     @Override
