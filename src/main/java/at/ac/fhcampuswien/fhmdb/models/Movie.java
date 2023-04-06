@@ -70,8 +70,7 @@ public class Movie implements Comparable<Movie>{
 
     public String getDirector() { return director; }
 
-
-
+    public double getRating() { return rating; }
 
     public static List<Movie> initializeMovies(){
         String url = "https://prog2.fh-campuswien.ac.at/movies";
@@ -91,7 +90,7 @@ public class Movie implements Comparable<Movie>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Movie movie = (Movie) o;
-        return Objects.equals(title, movie.title) && Objects.equals(description, movie.description) && Objects.equals(genres, movie.genres) && Objects.equals(releaseYear, movie.releaseYear);
+        return Objects.equals(title, movie.title) && Objects.equals(description, movie.description) && Objects.equals(genres, movie.genres) && Objects.equals(releaseYear, movie.releaseYear) && Objects.equals(rating, movie.rating);
     }
 
     @Override
