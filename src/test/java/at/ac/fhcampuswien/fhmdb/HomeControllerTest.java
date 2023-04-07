@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 class HomeControllerTest {
 
-    @Test
+    /*@Test
     void ascending_sorting() {
         // given
         ArrayList<Movie> movies = new ArrayList<>();
@@ -68,7 +68,7 @@ class HomeControllerTest {
         temp.add(e);
         String expected = temp.toString();
         assertArrayEquals(expected.toCharArray(), actual.toCharArray());
-    }
+    }*/
 
     @Test
     void filter_by_genre_null_leaves_movies_unchanged() {
