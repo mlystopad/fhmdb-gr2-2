@@ -6,8 +6,6 @@ import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,11 +16,9 @@ import java.net.URL;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HomeController implements Initializable {
-    @FXML
-    public JFXButton searchBtn;
-
     @FXML
     public TextField searchField;
 
@@ -49,6 +45,8 @@ public class HomeController implements Initializable {
     private String selectedGenre = "Filter by Genre";
     private String selectedReleaseYear = "Filter by Release Year";
     private String selectedRating = "Filter by Rating";
+
+    private String searchText = "";
 
     public ObservableList<Movie> getObservableMovies() {
         return observableMovies;
@@ -89,8 +87,6 @@ public class HomeController implements Initializable {
     }
 
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         observableMovies.addAll(allMovies);         // add movies to observable list
@@ -128,52 +124,8 @@ public class HomeController implements Initializable {
             }
         });
 
-/*      // OLD
         searchField.textProperty().addListener((observable, oldField, newField) -> {
-            fillMovies();
-            String selectedGenre = (String) genreComboBox.getSelectionModel().getSelectedItem();
-
-            filterMoviesByGenre(selectedGenre);
-            filterMoviesBySearchString(newField);
-        });
-
-        genreComboBox.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                fillMovies();
-
-                filterMoviesByGenre(newValue);
-                filterMoviesBySearchString(searchField.getText());
-            }
-        });
-
-        releaseYearComboBox.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                fillMovies();
-                filterMoviesByGenre((String) genreComboBox.getSelectionModel().getSelectedItem());
-                filterMoviesBySearchString(searchField.getText());
-                Integer releaseYear = Integer.parseInt(newValue);
-                filterMoviesByReleaseYear(releaseYear);
-            }
-        });
-
-        ratingFromComboBox.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                fillMovies();
-                filterMoviesByGenre((String) genreComboBox.getSelectionModel().getSelectedItem());
-                filterMoviesBySearchString(searchField.getText());
-                if(!newValue.equals("Filter by Rating")){
-                    Double rating = Double.parseDouble(newValue);
-                    filterMoviesByRating(rating);
-                }
-            }
-        });
-        */
-
-        // NEW
-        searchField.textProperty().addListener((observable, oldField, newField) -> {
+            searchText = searchField.getText();
             applyFilters();
         });
 
@@ -197,22 +149,43 @@ public class HomeController implements Initializable {
     private void applyFilters() {
         observableMovies.setAll(allMovies);
 
+        boolean otherfilter = false;
+
         // Apply filters
-        if (!selectedGenre.equals("Filter by Genre")) {
-            filterMoviesByGenre(selectedGenre);
-        }
 
         if (!selectedReleaseYear.equals("Filter by Release Year")) {
             Integer releaseYear = Integer.parseInt(selectedReleaseYear);
             filterMoviesByReleaseYear(releaseYear);
+            otherfilter = true;
         }
 
         if (!selectedRating.equals("Filter by Rating")) {
             Double rating = Double.parseDouble(selectedRating);
             filterMoviesByRating(rating);
+            otherfilter = true;
         }
 
-        filterMoviesBySearchString(searchField.getText());
+        if (!selectedGenre.equals("Filter by Genre")) {
+            if(!otherfilter && !searchText.equals("")){
+                filterMoviesByAPI();
+            }
+            filterMoviesByGenre(selectedGenre);
+        }
+
+        filterMoviesBySearchString(searchText);
+    }
+
+    private void filterMoviesByAPI(){
+        String apiurl = "https://prog2.fh-campuswien.ac.at/movies?query=" + searchText + "&genre=" + selectedGenre;
+
+        System.out.println("API call: text=" + searchText + " genre=" + selectedGenre);
+
+        MovieAPI movieAPI = new MovieAPI();
+        List<Movie> movies = Stream.of(movieAPI.getApiMovies(apiurl))
+                .collect(Collectors.toList());
+
+        observableMovies.clear();
+        observableMovies.addAll(movies);
     }
 
     public void filterMoviesByGenre(String genre){
