@@ -99,7 +99,6 @@ public class HomeController implements Initializable {
         genreComboBox.getItems().addAll(Genre.getGenresAsList());
         genreComboBox.getSelectionModel().select(0);
 
-
         releaseYearComboBox.getItems().add("Filter by Release Year");
         releaseYearComboBox.getItems().addAll(getReleaseYearsAsList());
         releaseYearComboBox.getSelectionModel().select(0);
