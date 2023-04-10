@@ -73,7 +73,7 @@ public class HomeController implements Initializable {
             }
         }
         Collections.sort(releaseYears);
-        releaseYearComboBox.getItems().add("Filter by Release Year");
+        releaseYears.add(0, "Filter by Release Year");
         return releaseYears;
     }
 
