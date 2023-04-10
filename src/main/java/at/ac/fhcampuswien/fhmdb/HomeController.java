@@ -73,6 +73,7 @@ public class HomeController implements Initializable {
             }
         }
         Collections.sort(releaseYears);
+        releaseYearComboBox.getItems().add("Filter by Release Year");
         return releaseYears;
     }
 
@@ -103,11 +104,9 @@ public class HomeController implements Initializable {
         genreComboBox.getSelectionModel().select(0);
 
 
-        releaseYearComboBox.getItems().add("Filter by Release Year");
         releaseYearComboBox.getItems().addAll(getReleaseYearsAsList());
         releaseYearComboBox.getSelectionModel().select(0);
 
-        //ratingFromComboBox.getItems().add("Filter by Rating");
         ratingFromComboBox.getItems().addAll(getRatingsAsList());
         ratingFromComboBox.getSelectionModel().select(0);
 
