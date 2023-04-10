@@ -67,8 +67,9 @@ public class HomeController implements Initializable {
         ObservableList<String> releaseYears = FXCollections.observableArrayList();
         for (Movie movie : allMovies) {
             int year = movie.getReleaseYear();
-            if (!releaseYears.contains(year)) {
-                releaseYears.add(String.valueOf(year));
+            String yearStr = String.valueOf(year);
+            if (!releaseYears.contains(yearStr)) {
+                releaseYears.add(yearStr);
             }
         }
         Collections.sort(releaseYears);
@@ -87,8 +88,6 @@ public class HomeController implements Initializable {
         ratingsList.add(0, "Filter by Rating");
         return ratingsList;
     }
-
-
 
 
     @Override
@@ -225,12 +224,7 @@ public class HomeController implements Initializable {
             return;
         }
 
-        Iterator<Movie> iterator = observableMovies.iterator();
-        while (iterator.hasNext()){
-            if(!iterator.next().getGenres().contains(genre)){
-                iterator.remove();
-            }
-        }
+        observableMovies.removeIf(movie -> !movie.getGenres().contains(genre));
     }
 
     public void filterMoviesBySearchString(String toSearch){
@@ -241,31 +235,19 @@ public class HomeController implements Initializable {
             return;
         }
 
-        Iterator<Movie> iterator = observableMovies.iterator();
-        while (iterator.hasNext()){
-            Movie next = iterator.next();
-            if(!next.getTitle().toLowerCase().contains(toSearch.toLowerCase()) &&
-                    !next.getDescription().toLowerCase().contains(toSearch.toLowerCase())){
-                iterator.remove();
-            }
-        }
+        observableMovies.removeIf(next -> !next.getTitle().toLowerCase().contains(toSearch.toLowerCase()) &&
+                !next.getDescription().toLowerCase().contains(toSearch.toLowerCase()));
     }
 
-    public void filterMoviesByReleaseYear(Integer releaseYear){
-        if(releaseYear == null){
+    public void filterMoviesByReleaseYear(Integer releaseYear) {
+        if (releaseYear == null) {
             System.err.println("Release year must not be null!");
             return;
         }
 
-        Iterator<Movie> iterator = observableMovies.iterator();
-        while (iterator.hasNext()){
-            Movie movie = iterator.next();
-            Integer movieReleaseYear = movie.getReleaseYear();
-            if (!movieReleaseYear.equals(releaseYear)) {
-                iterator.remove();
-            }
-        }
+        observableMovies.removeIf(movie -> !Objects.equals(movie.getReleaseYear(), releaseYear));
     }
+
 
     public void filterMoviesByRating(Double rating){
         if(rating == null){
@@ -273,16 +255,8 @@ public class HomeController implements Initializable {
             return;
         }
 
-        Iterator<Movie> iterator = observableMovies.iterator();
-        while (iterator.hasNext()){
-            Movie movie = iterator.next();
-            if(movie.getRating() < rating){
-                iterator.remove();
-            }
-        }
+        observableMovies.removeIf(movie -> movie.getRating() < rating);
     }
-
-
 
     public String getMostPopularActor(List<Movie> movies) {
         return movies.stream()
