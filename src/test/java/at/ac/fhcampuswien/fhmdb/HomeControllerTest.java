@@ -96,8 +96,6 @@ class HomeControllerTest {
 
     }
 
-
-
     @Test
     void filter_by_search_string_null_leaves_movies_unchanged() {
         // given
@@ -141,7 +139,6 @@ class HomeControllerTest {
 
         //then
         assertArrayEquals(expected.toArray(), hc.getObservableMovies().toArray());
-
     }
 
     @Test
@@ -175,5 +172,4 @@ class HomeControllerTest {
         //then
         assertArrayEquals(expected.toArray(), hc.getObservableMovies().toArray());
     }
-
 }
